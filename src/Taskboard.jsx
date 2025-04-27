@@ -11,6 +11,35 @@ const Taskboard = ({ user }) => {
   const [assignedBy, setAssignedBy] = useState('');
   const [editingTask, setEditingTask] = useState(null);  // State to track the task being edited
 
+  // New state to track the task being dragged
+const [draggedTask, setDraggedTask] = useState(null);
+
+// When dragging starts
+const handleDragStart = (task) => {
+  setDraggedTask(task);
+};
+
+// When dragging over a column
+const handleDragOver = (e) => {
+  e.preventDefault(); // Important to allow drop
+};
+
+// When dropping on a column
+const handleDrop = async (newStatus) => {
+  if (draggedTask) {
+    const taskRef = doc(db, 'tasks', draggedTask.id);
+    await updateDoc(taskRef, {
+      status: newStatus,
+    });
+
+    setTasks(tasks.map(task => 
+      task.id === draggedTask.id ? { ...task, status: newStatus } : task
+    ));
+
+    setDraggedTask(null);
+  }
+};
+
   // Fetch tasks from Firestore when the component mounts
   useEffect(() => {
     const fetchTasks = async () => {
@@ -32,16 +61,13 @@ const Taskboard = ({ user }) => {
     setTasks(tasks.filter(task => task.id !== id));  // Remove task from state
   };
 
-  // Handle task editing
   const handleEditTask = (task) => {
-    // Set the task being edited
     setEditingTask(task);
     setTaskText(task.text);
     setTaskStatus(task.status);
     setAssignedBy(task.assignedBy);
   };
 
-  // Update task in Firestore
   const handleUpdateTask = async () => {
     if (taskText.trim() && assignedBy.trim()) {
       const taskRef = doc(db, 'tasks', editingTask.id);
@@ -117,49 +143,80 @@ const Taskboard = ({ user }) => {
           </button>
         </div>
       </div>
+<div>
+  <div className='tasks'>
+      <div 
+  className="task-column"
+  onDragOver={handleDragOver}
+  onDrop={() => handleDrop('To Do')}
+>
+  <h3>To Do</h3>
+  {tasks
+    .filter((task) => task.status === 'To Do')
+    .map((task) => (
+      <div
+        key={task.id}
+        className="task-card"
+        draggable
+        onDragStart={() => handleDragStart(task)}
+      >
+        <p>{task.text}</p>
+        <p><strong>Assigned By:</strong> {task.assignedBy}</p>
+        <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+        <button onClick={() => handleEditTask(task)}>Edit</button>
+      </div>
+    ))}
+</div>
 
-      <div className="task-columns">
-        <div className="task-column">
-          <h3>To Do</h3>
-          {tasks
-            .filter((task) => task.status === 'To Do')
-            .map((task) => (
-              <div key={task.id} className="task-card">
-                <p>{task.text}</p>
-                <p><strong>Assigned By:</strong> {task.assignedBy}</p>
-                <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
-                <button onClick={() => handleEditTask(task)}>Edit</button>
-              </div>
-            ))}
-        </div>
 
-        <div className="task-column">
-          <h3>In Progress</h3>
-          {tasks
-            .filter((task) => task.status === 'In Progress')
-            .map((task) => (
-              <div key={task.id} className="task-card">
-                <p>{task.text}</p>
-                <p><strong>Assigned By:</strong> {task.assignedBy}</p>
-                <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
-                <button onClick={() => handleEditTask(task)}>Edit</button>
-              </div>
-            ))}
-        </div>
+<div 
+  className="task-column"
+  onDragOver={handleDragOver}
+  onDrop={() => handleDrop('In Progress')}
+>
+  <h3>In Progress</h3>
+  {tasks
+    .filter((task) => task.status === 'In Progress')
+    .map((task) => (
+      <div
+        key={task.id}
+        className="task-card"
+        draggable
+        onDragStart={() => handleDragStart(task)}
+      >
+        <p>{task.text}</p>
+        <p><strong>Assigned By:</strong> {task.assignedBy}</p>
+        <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+        <button onClick={() => handleEditTask(task)}>Edit</button>
+      </div>
+    ))}
+</div>
 
-        <div className="task-column">
-          <h3>Done</h3>
-          {tasks
-            .filter((task) => task.status === 'Done')
-            .map((task) => (
-              <div key={task.id} className="task-card">
-                <p>{task.text}</p>
-                <p><strong>Assigned By:</strong> {task.assignedBy}</p>
-                <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
-                <button onClick={() => handleEditTask(task)}>Edit</button>
-              </div>
-            ))}
-        </div>
+
+<div 
+  className="task-column"
+  onDragOver={handleDragOver}
+  onDrop={() => handleDrop('Done')}
+>
+  <h3>Done</h3>
+  {tasks
+    .filter((task) => task.status === 'Done')
+    .map((task) => (
+      <div
+        key={task.id}
+        className="task-card"
+        draggable
+        onDragStart={() => handleDragStart(task)}
+      >
+        <p>{task.text}</p>
+        <p><strong>Assigned By:</strong> {task.assignedBy}</p>
+        <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+        <button onClick={() => handleEditTask(task)}>Edit</button>
+      </div>
+    ))}
+</div>
+
+      </div>
       </div>
     </div>
   );

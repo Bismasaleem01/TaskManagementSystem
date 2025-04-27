@@ -84,3 +84,8 @@ nav button {
   border-radius: 5px;
   width: 320px;
 }
+@media (max-width: 768px) {
+  .navbar p{
+    font-size: 20px;
+  }
+}
