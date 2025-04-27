@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.header-container {
+  background-color: #282c34;
+  padding: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+
+.logout-btn {
+  background-color: rgb(93, 93, 239);
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+.logout-btn:hover {
+  background-color: rgb(73, 73, 194);
+}
+
+
+.logout-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(93, 93, 239, 0.5);
+}
+
+
+nav p,
+nav button {
+  margin: 0;
+}
+.logCont, .signCont{
+  width: 500px;
+  border: 1px solid black;
+  margin: auto;
+  margin-top: 180px;
+  text-align: center;
+  padding-bottom: 30px;
+}
+.logCont input, .signCont input{  
+  width: 300px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+}
+.logCont button, .signCont button{
+  padding: 10px;
+  border-radius: 5px;
+  width: 320px;
+}
